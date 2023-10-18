@@ -3,8 +3,7 @@ const bcrypt = require("bcrypt");
 
 const index = async (req, res) => {
   try {
-    console.log("hell world");
-    const adminList = await Admin.find({});
+    const adminList = await Admin.find({}).sort({ createdAt: -1 });
 
     if (adminList) {
       res.status(200).json({
@@ -42,7 +41,7 @@ const store = async (req, res) => {
     });
 
     if (adminCreate) {
-      res.status(200).json({
+      res.status(201).json({
         error: false,
         message: "Create admin successfully",
         data: adminCreate,
@@ -70,7 +69,7 @@ const update = async (req, res) => {
         },
         { new: true }
       );
-      res.json({
+      res.status(200).json({
         error: false,
         message: "Update Successfully",
         data: adminUpdate,
@@ -88,6 +87,25 @@ const update = async (req, res) => {
   }
 };
 
-const destroy = async (req, res) => {};
+const destroy = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const adminDelete = await Admin.findByIdAndDelete(id);
+    if (adminDelete) {
+      res.status(200).json({
+        error: false,
+        message: "Delete Successfully",
+      });
+    } else {
+      res.status(400).json({
+        error: true,
+        message: "Admin doesn't exit",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = { index, store, update, destroy };
