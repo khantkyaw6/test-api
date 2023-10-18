@@ -1,5 +1,7 @@
 const Admin = require("../../modal/admin/admin.modal");
 const bcrypt = require("bcrypt");
+const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Types;
 
 const index = async (req, res) => {
   try {
@@ -56,7 +58,7 @@ const update = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, email, password } = req.body;
-    const adminExist = await Admin.findById(id);
+    const adminExist = await Admin.findById(new ObjectId(id));
     if (adminExist) {
       const hashedPassword = await bcrypt.hash(password, process.env.SALT * 1);
 
