@@ -56,6 +56,7 @@ const store = async (req, res) => {
 
 const update = async (req, res) => {
   try {
+    console.log(req.params);
     const { id } = req.params;
     const { name, email, password } = req.body;
     const adminExist = await Admin.findById(new ObjectId(id));
